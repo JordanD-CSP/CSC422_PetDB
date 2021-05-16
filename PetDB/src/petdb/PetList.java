@@ -25,6 +25,38 @@ public class PetList {
         return true;
     }
     
+    private boolean printList(String name) {
+        System.out.println();
+        printTableHeader();
+        int itemsFound = 0;
+        for (int id = 0; id < petCount; id++) {
+            if (pets[id].getName().equalsIgnoreCase(name)) {
+                itemsFound++;
+                printTableRow(id, pets[id].getName(), pets[id].getAge());
+            }
+        }
+        printTableFooter(itemsFound);
+        System.out.println();
+        
+        return true;
+    }
+    
+    private boolean printList(int age) {
+        System.out.println();
+        printTableHeader();
+        int itemsFound = 0;
+        for (int id = 0; id < petCount; id++) {
+            if (pets[id].getAge() == age) {
+                itemsFound++;
+                printTableRow(id, pets[id].getName(), pets[id].getAge());
+            }
+        }
+        printTableFooter(itemsFound);
+        System.out.println();
+        
+        return true;
+    }
+    
     private static void printTableHeader() {
         System.out.println("+-------------------------+");
         System.out.println("|  ID | NAME       |  AGE |");
@@ -68,6 +100,7 @@ public class PetList {
         } while (true);
         System.out.printf("%d pets added.\n", petsAdded);
         System.out.println();
+        
         return true;
     }
 
@@ -75,34 +108,45 @@ public class PetList {
         System.out.println();
         System.out.print("Enter a name to search: ");
         String name = input.next();
-        printTableHeader();
-        int itemsFound = 0;
-        for (int id = 0; id < petCount; id++) {
-            if (pets[id].getName().equalsIgnoreCase(name)) {
-                itemsFound++;
-                printTableRow(id, pets[id].getName(), pets[id].getAge());
-            }
-        }
-        printTableFooter(itemsFound);
-        System.out.println();
         
-        return true;
+        return printList(name);
     }
     
     public boolean searchPetsByAge() {
         System.out.println();
         System.out.print("Enter age to search: ");
         int age = input.nextInt();
-        printTableHeader();
-        int itemsFound = 0;
-        for (int id = 0; id < petCount; id++) {
-            if (pets[id].getAge() == age) {
-                itemsFound++;
-                printTableRow(id, pets[id].getName(), pets[id].getAge());
-            }
-        }
-        printTableFooter(itemsFound);
+        
+        return printList(age);
+    }
+    
+    public boolean updatePet() {
+        printList();
         System.out.println();
+        System.out.print("Enter the pet ID to update: ");
+        int id = input.nextInt();
+        System.out.print("Enter new name and new age: ");
+        String newName = input.next();
+        int newAge = input.nextInt();
+        System.out.printf("%s %d changed to %s %d\n", 
+                pets[id].getName(), pets[id].getAge(), newName, newAge);
+        pets[id].setName(newName);
+        pets[id].setAge(newAge);
+        
+        return true;
+    }
+    
+    public boolean removePet() {
+        printList();
+        System.out.println();
+        System.out.print("Enter the pet ID to remove: ");
+        int id = input.nextInt();
+        System.out.printf("%s %d is remove.\n", 
+                pets[id].getName(), pets[id].getAge());
+        for ( ; id < petCount; id++) {
+            pets[id] = pets[id + 1];
+        }
+        petCount--;
         
         return true;
     }
