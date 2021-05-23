@@ -2,6 +2,7 @@ package petdb;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 /**
@@ -31,6 +32,7 @@ public class PetDB {
             displayMenu();
         } while (select());
         
+        saveData();
         System.out.println("\nGoodbye!");
     }
     
@@ -69,6 +71,24 @@ public class PetDB {
                 System.out.println(ex);
             }
         }
+    }
+    
+    private static void saveData(){
+        File petData = new File("petData.txt");
+        try {
+            PrintWriter output = new PrintWriter(petData);
+            String name;
+            int age;
+            for (Pet pet: petList) {
+                name = pet.getName();
+                age = pet.getAge();
+                output.print(name + " " + age + " ");
+            }
+            output.close();
+        } catch (FileNotFoundException ex) {
+            System.out.println(ex);
+        }
+        
     }
     
     public static void displayMenu() {
