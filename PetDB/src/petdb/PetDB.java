@@ -70,11 +70,16 @@ public class PetDB {
             if (line.equals("done")) {
                 break;
             }
-            String[] petData = line.split(" ");
-            String name = petData[0];
-            int age = Integer.parseInt(petData[1]);
-            petList.add(new Pet(name, age));
-            petsAdded++;
+            if (petList.size() == 5) {
+                System.out.println("Error: Database is full.");
+                break;
+            } else {
+                String[] petData = line.split(" ");
+                String name = petData[0];
+                int age = Integer.parseInt(petData[1]);
+                petList.add(new Pet(name, age));
+                petsAdded++;
+            }
         } while (true);
         System.out.printf("%d pets added.\n", petsAdded);
         System.out.println();
