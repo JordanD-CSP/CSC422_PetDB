@@ -55,22 +55,26 @@ public class PetDB {
         }
     }
     
-    public static boolean addPets() {
+    private static boolean addPets() {
         System.out.println();
         int petsAdded = 0;
         do {
-            System.out.print("add pet (name, age): ");
-            String name = input.next().trim();
-            if (name.equals("done")) {
+            String line;
+            do {
+                System.out.print("add pet (name, age): ");
+                line = input.nextLine().trim();
+                if (line.equals("done")) {
+                    break;
+                }
+            } while (!inputIsValid(line));
+            if (line.equals("done")) {
                 break;
             }
-            int age = input.nextInt();
-            if (age < 0 || age > 20) {
-                System.out.printf("Error: %d is not a valid age.\n", age);
-            } else {
-                petList.add(new Pet(name, age));
-                petsAdded++;
-            }
+            String[] petData = line.split(" ");
+            String name = petData[0];
+            int age = Integer.parseInt(petData[1]);
+            petList.add(new Pet(name, age));
+            petsAdded++;
         } while (true);
         System.out.printf("%d pets added.\n", petsAdded);
         System.out.println();
@@ -78,7 +82,7 @@ public class PetDB {
         return true;
     }
     
-    public static void displayMenu() {
+    private static void displayMenu() {
         int optionNumber = 1;
         for (String option: options) {
             System.out.println(optionNumber + ") " + option);
@@ -104,7 +108,7 @@ public class PetDB {
         }
     }
     
-    public static boolean printTable() {
+    private static boolean printTable() {
         String name;
         int age;
         
@@ -179,7 +183,7 @@ public class PetDB {
         System.out.printf("| %3d | %-10s | %4d |\n", id, name, age);
     }
     
-    public static boolean removePet() {
+    private static boolean removePet() {
         printTable();
         System.out.println();
         System.out.print("Enter the pet ID to remove: ");
@@ -208,7 +212,7 @@ public class PetDB {
         }
     }
     
-    public static boolean searchPetsByAge() {
+    private static boolean searchPetsByAge() {
         System.out.println();
         System.out.print("Enter age to search: ");
         int age = input.nextInt();
@@ -216,7 +220,7 @@ public class PetDB {
         return printTable(age);
     }
     
-    public static boolean searchPetsByName() {
+    private static boolean searchPetsByName() {
         System.out.println();
         System.out.print("Enter a name to search: ");
         String name = input.next();
@@ -224,26 +228,43 @@ public class PetDB {
         return printTable(name);
     }
     
-    public static boolean updatePet() {
+    private static boolean updatePet() {
         printTable();
         System.out.println();
         System.out.print("Enter the pet ID to update: ");
         int id = input.nextInt();
+        String line;
         String newName;
         int newAge;
         do {
             System.out.print("Enter new name and new age: ");
-            newName = input.next();
-            newAge = input.nextInt();
-            if (newAge < 0 || newAge > 20) {
-                System.out.printf("Error: %d is not a valid age.\n", newAge);
-            }
-        } while (newAge < 0 || newAge > 20);
+            line = input.nextLine();
+        } while (!inputIsValid(line));
+        String[] petData = line.split(" ");
+        newName = petData[0];
+        newAge = Integer.parseInt(petData[1]);
         System.out.printf("%s %d changed to %s %d\n", 
                 petList.get(id).getName(), petList.get(id).getAge(), newName, newAge);
         petList.get(id).setName(newName);
         petList.get(id).setAge(newAge);
         
         return true;
+    }
+    
+    private static boolean inputIsValid(String input) {
+        String[] input2 = input.split(" ");
+        if (input2.length != 2) {
+            System.out.printf("Error: %s is not a valid input.\n", input);
+            return false;
+        } else {
+            int age = Integer.parseInt(input2[1]);
+            if (age < 1 || age > 20) {
+                System.out.printf("Error: %d is not a valid age.\n", age);
+                return false;
+            } else {
+                return true;
+            }
+        }
+        
     }
 }
