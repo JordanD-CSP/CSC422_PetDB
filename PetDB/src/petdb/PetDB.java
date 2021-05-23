@@ -62,11 +62,11 @@ public class PetDB {
                 Scanner dataScanner = new Scanner(petData);
                 String name;
                 int age;
-                do {
+                while (dataScanner.hasNext()) {
                     name = dataScanner.next();
                     age = dataScanner.nextInt();
                     petList.add(new Pet(name, age));
-                } while (dataScanner.hasNext());
+                }
             } catch (FileNotFoundException ex) {
                 System.out.println(ex);
             }
