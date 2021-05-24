@@ -19,6 +19,7 @@ public class PetDB {
         "Search pets by age", // option 6
         "Exit Program"}; // default
     static Scanner input = new Scanner(System.in);
+    static Scanner select = new Scanner(System.in);
     static PetList petList = new PetList();
     
     /**
@@ -41,7 +42,7 @@ public class PetDB {
         int option;
         do {
             System.out.print("Your choice: ");
-            option = input.nextInt();
+            option = select.nextInt();
         } while (option < 1 || option > options.length);
         
         switch (option) {
@@ -192,7 +193,10 @@ public class PetDB {
         printTable();
         System.out.println();
         System.out.print("Enter the pet ID to remove: ");
-        int id = input.nextInt();
+        int id = select.nextInt();
+        if (!idIsValid(id)) {
+            return true;
+        }
         System.out.printf("%s %d is removed.\n", 
                 petList.get(id).getName(), petList.get(id).getAge());
         petList.remove(id);
@@ -237,7 +241,10 @@ public class PetDB {
         printTable();
         System.out.println();
         System.out.print("Enter the pet ID to update: ");
-        int id = input.nextInt();
+        int id = select.nextInt();
+        if (!idIsValid(id)) {
+            return true;
+        }
         String line;
         String newName;
         int newAge;
@@ -270,6 +277,14 @@ public class PetDB {
                 return true;
             }
         }
-        
+    }
+    
+    private static boolean idIsValid(int id) {
+        if (id < 0 || id >= petList.size()) {
+            System.out.printf("Error: ID %d does not exist.\n", id);
+            return false;
+        } else {
+            return true;
+        }
     }
 }
